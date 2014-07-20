@@ -40,7 +40,7 @@
 char *mprog_next_command args( ( char *clist ) );
 bool mprog_seval args( ( char *lhs, char *opr, char *rhs ) );
 bool mprog_veval args( ( int lhs, char *opr, int rhs ) );
-bool mprog_do_ifchck args( ( char *ifchck, CHAR_DATA * mob,
+unsigned int mprog_do_ifchck args( ( char *ifchck, CHAR_DATA * mob,
                              CHAR_DATA * actor, OBJ_DATA * obj, void *vo, CHAR_DATA * rndm ) );
 char *mprog_process_if args( ( char *ifchck, char *com_list,
                                CHAR_DATA * mob, CHAR_DATA * actor, OBJ_DATA * obj, void *vo, CHAR_DATA * rndm ) );
@@ -78,6 +78,8 @@ char *mprog_next_command( char *clist )
 {
 
    char *pointer = clist;
+
+   if(!pointer) return NULL;
 
    while( *pointer != '\n' && *pointer != '\0' )
       pointer++;
@@ -149,7 +151,7 @@ bool mprog_veval( int lhs, char *opr, int rhs )
  * to reduce the redundancy of the mammoth if statement list.
  * If there are errors, then return -1 otherwise return boolean 1,0
  */
-bool mprog_do_ifchck( char *ifchck, CHAR_DATA * mob, CHAR_DATA * actor, OBJ_DATA * obj, void *vo, CHAR_DATA * rndm )
+unsigned int mprog_do_ifchck( char *ifchck, CHAR_DATA * mob, CHAR_DATA * actor, OBJ_DATA * obj, void *vo, CHAR_DATA * rndm )
 {
 
    char buf[MAX_INPUT_LENGTH];
@@ -1478,7 +1480,6 @@ void mprog_process_cmnd( char *cmnd, CHAR_DATA * mob, CHAR_DATA * actor, OBJ_DAT
  */
 void mprog_driver( char *com_list, CHAR_DATA * mob, CHAR_DATA * actor, OBJ_DATA * obj, void *vo )
 {
-
    char tmpcmndlst[MAX_STRING_LENGTH];
    char buf[MAX_INPUT_LENGTH];
    char *morebuf;
@@ -1487,6 +1488,8 @@ void mprog_driver( char *com_list, CHAR_DATA * mob, CHAR_DATA * actor, OBJ_DATA 
    CHAR_DATA *rndm = NULL;
    CHAR_DATA *vch = NULL;
    int count = 0;
+
+   if(!com_list || !actor || !obj || !vo) return; //andreas
 
    if( IS_AFFECTED( mob, AFF_CHARM ) )
       return;

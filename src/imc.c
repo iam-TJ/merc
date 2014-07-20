@@ -329,7 +329,7 @@ char *imcone_argument( char *argument, char *arg_first )
    if( arg_first )
       arg_first[0] = '\0';
 
-   if( !argument || argument[0] == '\0' )
+   if( argument[0] == '\0' )
       return NULL;
 
    while( isspace( *argument ) )
@@ -805,22 +805,22 @@ void imc_new_reminfo( char *mud, char *version, char *netname, char *url, char *
 
    p->name = IMCSTRALLOC( mud );
 
-   if( !url || url[0] == '\0' )
+   if( url[0] == '\0' )
       p->url = IMCSTRALLOC( "Unknown" );
    else
       p->url = IMCSTRALLOC( url );
 
-   if( !version || version[0] == '\0' )
+   if( version[0] == '\0' )
       p->version = IMCSTRALLOC( "Unknown" );
    else
       p->version = IMCSTRALLOC( version );
 
-   if( !netname || netname[0] == '\0' )
+   if( netname[0] == '\0' )
       p->network = IMCSTRALLOC( this_imcmud->network );
    else
       p->network = IMCSTRALLOC( netname );
 
-   if( !path || path[0] == '\0' )
+   if( path[0] == '\0' )
       p->path = IMCSTRALLOC( "UNKNOWN" );
    else
       p->path = IMCSTRALLOC( path );
@@ -1057,7 +1057,7 @@ void imc_new_channel( char *chan, char *owner, char *ops, char *invite, char *ex
 {
    IMC_CHANNEL *c;
 
-   if( !chan || chan[0] == '\0' )
+   if( chan[0] == '\0' )
    {
       imclog( "%s: NULL channel name received, skipping", __FUNCTION__ );
       return;
@@ -1893,7 +1893,7 @@ PFUN( imc_recv_broadcast )
    if( !( c = imc_findchannel( chan ) ) )
       return;
 
-   if( !sender || sender[0] == '\0' )
+   if( sender[0] == '\0' )
       imc_display_channel( c, q->from, txt, em );
    else
       imc_display_channel( c, sender, txt, em );
@@ -2162,7 +2162,7 @@ char *break_newlines( char *argument, char *arg_first )
    if( arg_first )
       arg_first[0] = '\0';
 
-   if( !argument || argument[0] == '\0' )
+   if( argument[0] == '\0' )
       return NULL;
 
    while( isspace( *argument ) )
@@ -2618,37 +2618,37 @@ PFUN( imc_recv_isalive )
 
    r->expired = FALSE;
 
-   if( url && url[0] != '\0' )
+   if( url[0] != '\0' )
    {
       IMCSTRFREE( r->url );
       r->url = IMCSTRALLOC( url );
    }
 
-   if( version && version[0] != '\0' )
+   if( version[0] != '\0' )
    {
       IMCSTRFREE( r->version );
       r->version = IMCSTRALLOC( version );
    }
 
-   if( netname && netname[0] != '\0' )
+   if( netname[0] != '\0' )
    {
       IMCSTRFREE( r->network );
       r->network = IMCSTRALLOC( netname );
    }
 
-   if( q->route && q->route[0] != '\0' )
+   if( q->route[0] != '\0' )
    {
       IMCSTRFREE( r->path );
       r->path = IMCSTRALLOC( q->route );
    }
 
-   if( host && host[0] != '\0' )
+   if( host[0] != '\0' )
    {
       IMCSTRFREE( r->host );
       r->host = IMCSTRALLOC( host );
    }
 
-   if( iport && iport[0] != '\0' )
+   if( iport[0] != '\0' )
    {
       IMCSTRFREE( r->port );
       r->port = IMCSTRALLOC( iport );
@@ -2725,7 +2725,7 @@ PFUN( imc_recv_iceupdate )
       return;
    }
 
-   if( !chan || chan[0] == '\0' )
+   if( chan[0] == '\0' )
    {
       imclog( "%s: NULL channel name received, skipping", __FUNCTION__ );
       return;
@@ -3128,7 +3128,7 @@ void imc_handle_autosetup( char *source, char *servername, char *cmd, char *txt,
    if( !strcasecmp( cmd, "accept" ) )
    {
       imclog( "Autosetup completed successfully." );
-      if( encrypt && encrypt[0] != '\0' && !strcasecmp( encrypt, "SHA256-SET" ) )
+      if( encrypt[0] != '\0' && !strcasecmp( encrypt, "SHA256-SET" ) )
       {
          imclog( "SHA-256 Authentication has been enabled." );
          this_imcmud->sha256pass = TRUE;
@@ -3205,7 +3205,7 @@ void imc_process_authentication( char *packet )
    packet = imcone_argument( packet, netname );
    packet = imcone_argument( packet, encrypt );
 
-   if( !rname || rname[0] == '\0' )
+   if( rname[0] == '\0' )
    {
       imclog( "%s", "Incomplete authentication packet. Unable to connect." );
       imc_shutdown( FALSE );
@@ -3218,7 +3218,7 @@ void imc_process_authentication( char *packet )
       char *cryptpwd;
       long auth_value = 0;
 
-      if( !pw || pw[0] == '\0' )
+      if( pw[0] == '\0' )
       {
          imclog( "SHA256 Authentication failure: No auth_value was returned by %s.", rname );
          imc_shutdown( FALSE );
@@ -3261,7 +3261,7 @@ void imc_process_authentication( char *packet )
       }
 
       imclog( "%s", "Standard Authentication completed." );
-      if( encrypt && encrypt[0] != '\0' && !strcasecmp( encrypt, "SHA256-SET" ) )
+      if( encrypt[0] != '\0' && !strcasecmp( encrypt, "SHA256-SET" ) )
       {
          imclog( "SHA-256 Authentication has been enabled." );
          this_imcmud->sha256pass = TRUE;
@@ -5078,7 +5078,7 @@ int ipv4_connect( void )
    }
 #endif
 
-   if( connect( desc, ( struct sockaddr * )&sa, sizeof( sa ) ) < 0 )
+   if( connect( desc, ( struct sockaddr * )&sa, sizeof( sa ) ) == -1 )
    {
       if( errno != EINPROGRESS )
       {
@@ -5366,6 +5366,7 @@ bool imc_startup_network( bool connected )
    {
       FILE *fp;
       char netname[SMST], server[SMST];
+      int err = 0;
 
       if( !( fp = fopen( IMC_HOTBOOT_FILE, "r" ) ) )
          imcbug( "%s: Unable to load IMC hotboot file.", __FUNCTION__ );
@@ -5373,7 +5374,11 @@ bool imc_startup_network( bool connected )
       {
          unlink( IMC_HOTBOOT_FILE );
 
-         fscanf( fp, "%s %s\n", netname, server );
+         if ((err = fscanf( fp, "%s %s\n", netname, server )) < 0 )
+         {
+             imcbug( "error %d reading hotboot file", err );
+             return FALSE;
+         }
 
          IMCSTRFREE( this_imcmud->network );
          this_imcmud->network = IMCSTRALLOC( netname );
@@ -5560,7 +5565,7 @@ IMC_CMD( imcsetup )
    argument = imcone_argument( argument, chan );
    argument = imcone_argument( argument, arg1 );
 
-   if( !imccmd || imccmd[0] == '\0' || !chan || chan[0] == '\0' )
+   if( imccmd[0] == '\0' || chan[0] == '\0' )
    {
       imc_to_char( "Syntax: imcsetup <command> <channel> [<data..>]\r\n", ch );
       imc_to_char( "Where 'command' is one of the following:\r\n", ch );
@@ -5628,7 +5633,7 @@ IMC_CMD( imcsetup )
          return;
       }
 
-      if( !arg1 || arg1[0] == '\0' )
+      if( arg1[0] == '\0' )
       {
          imc_to_char( "Missing 'newname' argument for 'imcsetup rename'\r\n", ch ); /* Lets be more kind! -- X */
          imc_to_char( "Syntax: imcsetup rename <local channel> <newname>\r\n", ch );   /* Fixed syntax message -- X */
@@ -5886,7 +5891,7 @@ IMC_CMD( imclisten )
 {
    IMC_CHANNEL *c;
 
-   if( !argument || argument[0] == '\0' )
+   if( argument[0] == '\0' )
    {
       imc_to_char( "~cCurrently tuned into:\r\n", ch );
       if( IMC_LISTEN( ch ) && IMC_LISTEN( ch )[0] != '\0' )
@@ -5965,7 +5970,7 @@ IMC_CMD( imctell )
 
    argument = imcone_argument( argument, buf );
 
-   if( !argument || argument[0] == '\0' )
+   if( argument[0] == '\0' )
    {
       int x;
 
@@ -6082,7 +6087,7 @@ IMC_CMD( imcreply )
       return;
    }
 
-   if( !argument || argument[0] == '\0' )
+   if( argument[0] == '\0' )
    {
       imc_to_char( "imcreply what?\r\n", ch );
       return;
@@ -6133,7 +6138,7 @@ IMC_CMD( imcreply )
 
 IMC_CMD( imcwho )
 {
-   if( !argument || argument[0] == '\0' )
+   if( argument[0] == '\0' )
    {
       imc_to_char( "imcwho which mud? See imclist for a list of connected muds.\r\n", ch );
       return;
@@ -6159,7 +6164,7 @@ IMC_CMD( imclocate )
 {
    char user[SMST];
 
-   if( !argument || argument[0] == '\0' )
+   if( argument[0] == '\0' )
    {
       imc_to_char( "imclocate who?\r\n", ch );
       return;
@@ -6182,7 +6187,7 @@ IMC_CMD( imcfinger )
 
    argument = imcone_argument( argument, arg );
 
-   if( !arg || arg[0] == '\0' )
+   if( arg[0] == '\0' )
    {
       imc_to_char( "~wUsage: imcfinger person@mud\r\n", ch );
       imc_to_char( "~wUsage: imcfinger <field> <value>\r\n", ch );
@@ -6222,7 +6227,7 @@ IMC_CMD( imcfinger )
       return;
    }
 
-   if( !argument || argument[0] == '\0' )
+   if( argument[0] == '\0' )
    {
       if( this_imcmud->state != IMC_ONLINE )
       {
@@ -6304,7 +6309,7 @@ IMC_CMD( imcfinger )
 /* Removed imcquery and put in imcinfo. -- Xorith */
 IMC_CMD( imcinfo )
 {
-   if( !argument || argument[0] == '\0' )
+   if( argument[0] == '\0' )
    {
       imc_to_char( "Syntax: imcinfo <mud>\r\n", ch );
       return;
@@ -6325,7 +6330,7 @@ IMC_CMD( imcbeep )
       return;
    }
 
-   if( !argument || argument[0] == '\0' )
+   if( argument[0] == '\0' )
    {
       imc_to_char( "Usage: imcbeep user@mud\r\n", ch );
       imc_to_char( "Usage: imcbeep [on]/[off]\r\n", ch );
@@ -6539,7 +6544,7 @@ IMC_CMD( imcconfig )
 
    argument = imcone_argument( argument, arg1 );
 
-   if( !arg1 || arg1[0] == '\0' )
+   if( arg1[0] == '\0' )
    {
       imc_to_char( "~wSyntax: &Gimc <field> [value]\r\n\r\n", ch );
       imc_to_char( "~wConfiguration info for your mud. Changes save when edited.\r\n", ch );
@@ -6631,7 +6636,7 @@ IMC_CMD( imcconfig )
       return;
    }
 
-   if( !argument || argument[0] == '\0' )
+   if( argument[0] == '\0' )
    {
       imcconfig( ch, "" );
       return;
@@ -6810,7 +6815,7 @@ IMC_CMD( imcignore )
 
    argument = imcone_argument( argument, arg );
 
-   if( !arg || arg[0] == '\0' )
+   if( arg[0] == '\0' )
    {
       imc_to_char( "You currently ignore the following:\r\n", ch );
       for( count = 0, ign = FIRST_IMCIGNORE( ch ); ign; ign = ign->next, count++ )
@@ -6833,7 +6838,7 @@ IMC_CMD( imcignore )
       return;
    }
 
-   if( !argument || argument[0] == '\0' )
+   if( argument[0] == '\0' )
    {
       imc_to_char( "Must specify both action and name.\r\n", ch );
       imc_to_char( "Please see IMCIGNORE HELP for details.\r\n", ch );
@@ -6878,7 +6883,7 @@ IMC_CMD( imcban )
 
    argument = imcone_argument( argument, arg );
 
-   if( !arg || arg[0] == '\0' )
+   if( arg[0] == '\0' )
    {
       imc_to_char( "The mud currently bans the following:\r\n", ch );
       for( count = 0, ban = first_imc_ban; ban; ban = ban->next, count++ )
@@ -6901,7 +6906,7 @@ IMC_CMD( imcban )
       return;
    }
 
-   if( !argument || argument[0] == '\0' )
+   if( argument[0] == '\0' )
    {
       imc_to_char( "Must specify both action and name.\r\nPlease type IMCBAN HELP for more information\r\n", ch );
       return;
@@ -6937,7 +6942,7 @@ IMC_CMD( imc_deny_channel )
 
    argument = imcone_argument( argument, vic_name );
 
-   if( !vic_name || vic_name[0] == '\0' || !argument || argument[0] == '\0' )
+   if( vic_name[0] == '\0' || argument[0] == '\0' )
    {
       imc_to_char( "Usage: imcdeny <person> <local channel name>\r\n", ch );
       imc_to_char( "Usage: imcdeny <person> [tell/beep/finger]\r\n", ch );
@@ -7021,7 +7026,7 @@ IMC_CMD( imcpermstats )
 {
    CHAR_DATA *victim;
 
-   if( !argument || argument[0] == '\0' )
+   if( argument[0] == '\0' )
    {
       imc_to_char( "Usage: imcperms <user>\r\n", ch );
       return;
@@ -7053,7 +7058,7 @@ IMC_CMD( imcpermset )
 
    argument = imcone_argument( argument, arg );
 
-   if( !arg || arg[0] == '\0' )
+   if( arg[0] == '\0' )
    {
       imc_to_char( "Usage: imcpermset <user> <permission>\r\n", ch );
       imc_to_char( "Permission can be one of: None, Mort, Imm, Admin, Imp\r\n", ch );
@@ -7147,7 +7152,7 @@ IMC_CMD( imcchanwho )
    IMC_PACKET *p;
    char chan[SMST], mud[SMST];
 
-   if( !argument || argument[0] == '\0' )
+   if( argument[0] == '\0' )
    {
       imc_to_char( "Usage: imcchanwho <channel> [<mud> <mud> <mud> <...>|<all>]\r\n", ch );
       return;
@@ -7210,7 +7215,7 @@ IMC_CMD( imcremoteadmin )
    argument = imcone_argument( argument, pwd );
    argument = imcone_argument( argument, cmd );
 
-   if( !server || server[0] == '\0' || !cmd || cmd[0] == '\0' )
+   if( server[0] == '\0' || cmd[0] == '\0' )
    {
       imc_to_char( "Syntax: imcadmin <server> <password> <command> [<data..>]\r\n", ch );
       imc_to_char( "You must be an approved server administrator to use remote commands.\r\n", ch );
@@ -7255,7 +7260,7 @@ IMC_CMD( imchelp )
    IMC_HELP_DATA *help;
    int col, perm;
 
-   if( !argument || argument[0] == '\0' )
+   if( argument[0] == '\0' )
    {
       imcstrlcpy( buf, "~gHelp is available for the following commands:\r\n", LGST );
       imcstrlcat( buf, "~G---------------------------------------------\r\n", LGST );
@@ -7363,7 +7368,7 @@ IMC_CMD( imccedit )
    argument = imcone_argument( argument, name );
    argument = imcone_argument( argument, option );
 
-   if( !name || name[0] == '\0' || !option || option[0] == '\0' )
+   if( name[0] == '\0' || option[0] == '\0' )
    {
       imc_to_char( "Usage: imccedit <command> <create|delete|alias|rename|code|permission|connected> <field>.\r\n", ch );
       return;
@@ -7527,7 +7532,7 @@ IMC_CMD( imccedit )
       return;
    }
 
-   if( !argument || argument[0] == '\0' )
+   if( argument[0] == '\0' )
    {
       imc_to_char( "Required argument missing.\r\n", ch );
       imccedit( ch, "" );
@@ -7580,7 +7585,7 @@ IMC_CMD( imchedit )
    argument = imcone_argument( argument, name );
    argument = imcone_argument( argument, cmd );
 
-   if( !name || name[0] == '\0' || !cmd || cmd[0] == '\0' || !argument || argument[0] == '\0' )
+   if( name[0] == '\0' || cmd[0] == '\0' || argument[0] == '\0' )
    {
       imc_to_char( "Usage: imchedit <topic> [name|perm] <field>\r\n", ch );
       imc_to_char( "Where <field> can be either name, or permission level.\r\n", ch );
@@ -8060,21 +8065,21 @@ char *imc_send_social( CHAR_DATA * ch, char *argument, int telloption )
    if( telloption == 0 )
    {
       snprintf( socbuf, LGST, "%s", imc_find_social( ch, arg1, person, mud, 0 ) );
-      if( !socbuf || socbuf[0] == '\0' )
+      if( socbuf[0] == '\0' )
          return "";
    }
 
    if( telloption == 1 )
    {
       snprintf( socbuf, LGST, "%s", imc_find_social( ch, arg1, person, mud, 1 ) );
-      if( !socbuf || socbuf[0] == '\0' )
+      if( socbuf[0] == '\0' )
          return "";
    }
 
    if( telloption == 2 )
    {
       snprintf( socbuf, LGST, "%s", imc_find_social( ch, arg1, person, mud, 2 ) );
-      if( !socbuf || socbuf[0] == '\0' )
+      if( socbuf[0] == '\0' )
          return "";
    }
 
@@ -8347,7 +8352,7 @@ bool imc_command_hook( CHAR_DATA * ch, char *command, char *argument )
       return TRUE;
    }
 
-   if( !argument || argument[0] == '\0' )
+   if( argument[0] == '\0' )
    {
       int y;
 

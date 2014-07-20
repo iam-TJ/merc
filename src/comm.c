@@ -422,8 +422,12 @@ void new_descriptor( int control )
    size_t desc, size;
 
    size = sizeof( sock );
-   getsockname( control, ( struct sockaddr * )&sock, &size );
-   if( ( desc = accept( control, ( struct sockaddr * )&sock, &size ) ) < 0 )
+   if(getsockname( control, ( struct sockaddr * )&sock, (socklen_t *)&size ) < 0)
+   {
+		bug( "void new_descriptor: getsockname error", 0 );
+   }
+
+   if( ( desc = accept( control, ( struct sockaddr * )&sock, (socklen_t *)&size ) ) < 0 )
    {
       perror( "New_descriptor: accept" );
       return;
@@ -461,7 +465,7 @@ void new_descriptor( int control )
    dnew->outbuf = alloc_mem( dnew->outsize );
 
    size = sizeof( sock );
-   if( getpeername( desc, ( struct sockaddr * )&sock, &size ) < 0 )
+   if( getpeername( desc, ( struct sockaddr * )&sock, (socklen_t *)&size ) < 0 )
    {
       perror( "New_descriptor: getpeername" );
       dnew->host = str_dup( "(unknown)" );

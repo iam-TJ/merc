@@ -54,7 +54,7 @@ void trip args( ( CHAR_DATA * ch, CHAR_DATA * victim ) );
 void violence_update( void )
 {
    CHAR_DATA *ch;
-   CHAR_DATA *ch_next;
+   CHAR_DATA __attribute__ ((unused)) *ch_next;
    CHAR_DATA *victim;
    CHAR_DATA *rch;
    CHAR_DATA *rch_next;

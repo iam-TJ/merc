@@ -463,7 +463,7 @@ bool is_affected( CHAR_DATA * ch, int sn )
 void affect_join( CHAR_DATA * ch, AFFECT_DATA * paf )
 {
    AFFECT_DATA *paf_old;
-   bool found;
+   bool __attribute__ ((unused)) found;
 
    found = FALSE;
    for( paf_old = ch->affected; paf_old != NULL; paf_old = paf_old->next )
